@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/averageflow/gohooks.svg?branch=master)](https://travis-ci.com/averageflow/gohooks)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fa3f27e42986b329c2b2/maintainability)](https://codeclimate.com/github/averageflow/gohooks/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/fa3f27e42986b329c2b2/test_coverage)](https://codeclimate.com/github/averageflow/gohooks/test_coverage)
+[![codecov](https://codecov.io/gh/averageflow/gohooks/branch/master/graph/badge.svg?token=DK72X8ROZN)](https://codecov.io/gh/averageflow/gohooks)
 [![Go Report Card](https://goreportcard.com/badge/github.com/averageflow/gohooks)](https://goreportcard.com/report/github.com/averageflow/gohooks)
 
 
