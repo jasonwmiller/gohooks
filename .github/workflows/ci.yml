@@ -20,4 +20,4 @@ jobs:
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
           go test -json -v github.com/averageflow/gohooks/tests/... -coverpkg=github.com/averageflow/gohooks/... -coverprofile=c.out ./... ./...
-          ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+          ./cc-test-reporter after-build --exit-code 0
