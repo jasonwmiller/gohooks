@@ -15,6 +15,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Test
+        env:
+          CC_TEST_REPORTER_ID: 64bca50fbe9c734893daea6c98af1199c1de5d40e3550e950b0bfabc80a9ffcc
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
