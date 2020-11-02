@@ -1,10 +1,12 @@
 # GoHooks
 
-[![Build](https://action-badges.now.sh/averageflow/gohooks)](#)
+[![Build](https://img.shields.io/github/workflow/status/averageflow/gohooks/Test)](#)
+[![Size](https://img.shields.io/github/languages/code-size/averageflow/gohooks)](#)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fa3f27e42986b329c2b2/maintainability)](https://codeclimate.com/github/averageflow/gohooks/maintainability)
 [![codecov](https://codecov.io/gh/averageflow/gohooks/branch/master/graph/badge.svg?token=DK72X8ROZN)](https://codecov.io/gh/averageflow/gohooks)
 [![Go Report Card](https://goreportcard.com/badge/github.com/averageflow/gohooks)](https://goreportcard.com/report/github.com/averageflow/gohooks)
 [![License](https://img.shields.io/github/license/averageflow/gohooks.svg)](https://github.com/averageflow/gohooks/blob/master/LICENSE.md)
+[![Issues](https://img.shields.io/github/issues/averageflow/gohooks)](#)
 
 GoHooks make it easy to send and consume secured web-hooks from a Go application. A SHA-256 signature is created with the sent data plus an encryption salt and serves to validate on receiving, effectively making your applications only accept communication from a trusted party.
 
