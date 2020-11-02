@@ -4,8 +4,8 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.15.x]
-        os: [ubuntu-latest]
+        go-version: [1.14.x, 1.15.x]
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Go
@@ -16,10 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Test
         env:
-          CC_TEST_REPORTER_ID: 64bca50fbe9c734893daea6c98af1199c1de5d40e3550e950b0bfabc80a9ffcc
+          CODECOV_TOKEN: 2bc37bd4-980f-4f56-b981-e42f419a2ac7
         run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-          go test -json -v github.com/averageflow/gohooks/tests/... -coverpkg=github.com/averageflow/gohooks/... -coverprofile=c.out ./... ./...
-          ./cc-test-reporter after-build --exit-code 0
+          go test -v github.com/averageflow/gohooks/tests/... -coverpkg=github.com/averageflow/gohooks/... -coverprofile=coverage.out ./... ./...
+          curl -s https://codecov.io/bash | bash
