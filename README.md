@@ -1,5 +1,7 @@
 # GoHooks
 
+[![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go#networking)  
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/averageflow/gohooks/gohooks)](https://pkg.go.dev/github.com/averageflow/gohooks/gohooks)
 [![Build](https://img.shields.io/github/workflow/status/averageflow/gohooks/Test)](#)
 [![Size](https://img.shields.io/github/languages/code-size/averageflow/gohooks)](#)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fa3f27e42986b329c2b2/maintainability)](https://codeclimate.com/github/averageflow/gohooks/maintainability)
@@ -9,10 +11,6 @@
 [![Issues](https://img.shields.io/github/issues/averageflow/gohooks)](#)
 
 GoHooks make it easy to send and consume secured web-hooks from a Go application. A SHA-256 signature is created with the sent data plus an encryption salt and serves to validate on receiving, effectively making your applications only accept communication from a trusted party.
-
-## Documentation
-
-This package's documentation can be found at [pkg.go.dev](https://pkg.go.dev/github.com/averageflow/gohooks/gohooks).
 
 
 ## Installation
