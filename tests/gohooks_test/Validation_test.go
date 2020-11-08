@@ -21,15 +21,23 @@ func TestIsGoHookValid(t *testing.T) {
 
 	var hookData WebhookData
 
-	_ = json.Unmarshal(hook.PreparedData, &hookData)
+	err := json.Unmarshal(hook.PreparedData, &hookData)
+	if err != nil {
+		t.Errorf("Expected GoHook data to cleanly unmarshall to wanted JSON!")
+	}
 
 	isValid := gohooks.IsGoHookValid(hookData, hook.ResultingSha, secret)
 	if !isValid {
-		t.Errorf("Expected first GoHook to be valid")
+		t.Errorf("Expected GoHook to be valid")
 	}
 
-	isValid = gohooks.IsGoHookValid(hook.PreparedData, "invalid-signature", secret)
+	isValid = gohooks.IsGoHookValid(hookData, "invalid-signature", secret)
 	if isValid {
-		t.Errorf("Expected first GoHook to be invalid")
+		t.Errorf("Expected GoHook to be invalid")
+	}
+
+	isValid = gohooks.IsGoHookValid(make(chan int), "invalid-signature", "")
+	if isValid {
+		t.Errorf("Expected GoHook to be invalid")
 	}
 }

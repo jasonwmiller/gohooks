@@ -40,7 +40,8 @@ type GoHookPayload struct {
 	Data     interface{} `json:"data"`
 }
 
-// Create creates a webhook to be sent to another system, with a SHA 256 signature based on its contents.
+// Create creates a webhook to be sent to another system,
+// with a SHA 256 signature based on its contents.
 func (hook *GoHook) Create(data interface{}, resource, secret string) {
 	hook.Payload.Resource = resource
 	hook.Payload.Data = data
@@ -53,8 +54,8 @@ func (hook *GoHook) Create(data interface{}, resource, secret string) {
 	hook.PreparedData = preparedHookData
 
 	h := hmac.New(sha256.New, []byte(secret))
-	_, err = h.Write(preparedHookData)
 
+	_, err = h.Write(preparedHookData)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -72,12 +73,14 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 
 	if !hook.IsSecure {
 		// By default do not verify SSL certificate validity
-		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true} //nolint:gosec
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{
+			InsecureSkipVerify: true, //nolint:gosec
+		}
 	}
 
 	switch hook.PreferredMethod {
 	case http.MethodPost, http.MethodPatch, http.MethodPut, http.MethodDelete:
-		// Valid Methods, Do nothing
+		// Valid Methods, do nothing
 	default:
 		// By default send GoHook using a POST method
 		hook.PreferredMethod = http.MethodPost
@@ -85,13 +88,13 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 
 	client := &http.Client{}
 	ctx := context.Background()
+
 	req, err := http.NewRequestWithContext(
 		ctx,
 		hook.PreferredMethod,
 		receiverURL,
 		bytes.NewBuffer(hook.PreparedData),
 	)
-
 	if err != nil {
 		log.Println(err.Error())
 		return nil, err
