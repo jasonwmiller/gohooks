@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 )
 
 const (
@@ -86,7 +87,7 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 		hook.PreferredMethod = http.MethodPost
 	}
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: 30 * time.Second}
 	ctx := context.Background()
 
 	req, err := http.NewRequestWithContext(
@@ -103,6 +104,8 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Charset", "utf-8")
 	req.Header.Add(DefaultSignatureHeader, hook.ResultingSha)
+	req.Close = true
+
 	resp, err := client.Do(req)
 
 	if err != nil {
