@@ -16,47 +16,50 @@ func TestSend(t *testing.T) {
 	data := []int{1, 2, 3}
 
 	hook := &gohooks.GoHook{}
+	hook.CreateWithoutWrapper(data, secret)
+
+	hook = &gohooks.GoHook{}
 	hook.Create(data, "int-resource", secret)
 
-	resp, _ := hook.Send("http://www.google.com")
+	resp, _ := hook.Send("http://www.google.com", map[string]string{"test": "test"})
 	if resp != nil {
 		defer resp.Body.Close()
 	}
 
 	hook.PreferredMethod = http.MethodPatch
 
-	resp, _ = hook.Send(receiverURL)
+	resp, _ = hook.Send(receiverURL, map[string]string{"test": "test"})
 	if resp != nil {
 		defer resp.Body.Close()
 	}
 
 	hook.PreferredMethod = http.MethodPut
 
-	resp, _ = hook.Send(receiverURL)
+	resp, _ = hook.Send(receiverURL, nil)
 	if resp != nil {
 		defer resp.Body.Close()
 	}
 
 	hook.PreferredMethod = http.MethodDelete
 
-	resp, _ = hook.Send(receiverURL)
+	resp, _ = hook.Send(receiverURL, nil)
 	if resp != nil {
 		defer resp.Body.Close()
 	}
 
 	hook.PreferredMethod = "invalid"
 
-	resp, _ = hook.Send(receiverURL)
+	resp, _ = hook.Send(receiverURL, nil)
 	if resp != nil {
 		defer resp.Body.Close()
 	}
 
-	resp, _ = hook.Send("")
+	resp, _ = hook.Send("", nil)
 	if resp != nil {
 		defer resp.Body.Close()
 	}
 
-	resp, _ = hook.Send("ssh://google.com")
+	resp, _ = hook.Send("ssh://google.com", nil)
 	if resp != nil {
 		defer resp.Body.Close()
 	}

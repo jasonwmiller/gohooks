@@ -65,8 +65,29 @@ func (hook *GoHook) Create(data interface{}, resource, secret string) {
 	hook.ResultingSha = hex.EncodeToString(h.Sum(nil))
 }
 
+// CreateCreateWithoutWrapper creates a webhook to be sent to another system,
+// without wrapping it in a resource - data struct, with a SHA 256 signature based on its contents.
+func (hook *GoHook) CreateWithoutWrapper(data interface{}, secret string) {
+	preparedHookData, err := json.Marshal(data)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	hook.PreparedData = preparedHookData
+
+	h := hmac.New(sha256.New, []byte(secret))
+
+	_, err = h.Write(preparedHookData)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	// Get result and encode as hexadecimal string
+	hook.ResultingSha = hex.EncodeToString(h.Sum(nil))
+}
+
 // Send sends a GoHook to the specified URL, as a UTF-8 JSON payload.
-func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
+func (hook *GoHook) Send(receiverURL string, headers map[string]string) (*http.Response, error) {
 	if hook.SignatureHeader == "" {
 		// Use the DefaultSignatureHeader as default if no custom header is specified
 		hook.SignatureHeader = DefaultSignatureHeader
@@ -104,6 +125,12 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Charset", "utf-8")
 	req.Header.Add(DefaultSignatureHeader, hook.ResultingSha)
+
+	// Add user's additional headers
+	for i := range headers {
+		req.Header.Add(i, headers[i])
+	}
+
 	req.Close = true
 
 	resp, err := client.Do(req)
