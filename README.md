@@ -15,11 +15,11 @@ GoHooks make it easy to send and consume secured web-hooks from a Go application
 
 ## Installation
 
-Add `github.com/averageflow/gohooks` to your `go.mod` file and then import it into where you want to be using the package by using:
+Add `github.com/averageflow/gohooks/v2` to your `go.mod` file and then import it into where you want to be using the package by using:
 
 ```go
 import (
-    "github.com/averageflow/gohooks/gohooks"
+    "github.com/averageflow/gohooks/v2/gohooks"
 )
 ```
 
