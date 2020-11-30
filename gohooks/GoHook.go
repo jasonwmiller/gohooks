@@ -33,6 +33,8 @@ type GoHook struct {
 	// Please choose only POST, DELETE, PATCH or PUT
 	// Any other value will make the send use POST as fallback
 	PreferredMethod string
+	// Additional HTTP headers to be added to the hook
+	AdditionalHeaders map[string]string
 }
 
 // GoHookPayload represents the data that will be sent in the GoHook.
@@ -87,7 +89,7 @@ func (hook *GoHook) CreateWithoutWrapper(data interface{}, secret string) {
 }
 
 // Send sends a GoHook to the specified URL, as a UTF-8 JSON payload.
-func (hook *GoHook) Send(receiverURL string, headers map[string]string) (*http.Response, error) {
+func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 	if hook.SignatureHeader == "" {
 		// Use the DefaultSignatureHeader as default if no custom header is specified
 		hook.SignatureHeader = DefaultSignatureHeader
@@ -127,8 +129,8 @@ func (hook *GoHook) Send(receiverURL string, headers map[string]string) (*http.R
 	req.Header.Add(DefaultSignatureHeader, hook.ResultingSha)
 
 	// Add user's additional headers
-	for i := range headers {
-		req.Header.Add(i, headers[i])
+	for i := range hook.AdditionalHeaders {
+		req.Header.Add(i, hook.AdditionalHeaders[i])
 	}
 
 	req.Close = true

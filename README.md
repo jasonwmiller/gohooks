@@ -94,3 +94,12 @@ Example:
 ```go
 hook := &gohooks.GoHook{ PreferredMethod: http.MethodDelete }
 ```
+
+GoHooks can be sent with additional HTTP headers. If you desire this then initialize the GoHook struct with the custom option `AdditionalHeaders`.
+
+Example: 
+```go
+hook := &gohooks.GoHook{ AdditionalHeaders: map[string]string{"X-Header-Test": "Header value"} }
+```
+
+If you want to send your payload without GoHooks modifying it into its struct, use `CreateWithoutWrapper` when creating the GoHook.
