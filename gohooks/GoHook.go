@@ -11,6 +11,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/opentracing/opentracing-go"
 )
 
 const (
@@ -35,6 +37,8 @@ type GoHook struct {
 	PreferredMethod string
 	// Additional HTTP headers to be added to the hook
 	AdditionalHeaders map[string]string
+	// Span for distributed tracing
+	Span *opentracing.Span
 }
 
 // GoHookPayload represents the data that will be sent in the GoHook.
@@ -111,17 +115,24 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 	}
 
 	client := &http.Client{Timeout: 30 * time.Second}
-	ctx := context.Background()
 
-	req, err := http.NewRequestWithContext(
-		ctx,
+	req, err := http.NewRequest(
 		hook.PreferredMethod,
 		receiverURL,
 		bytes.NewBuffer(hook.PreparedData),
 	)
 	if err != nil {
-		log.Println(err.Error())
 		return nil, err
+	}
+
+	if hook.Span != nil {
+		ctx := opentracing.ContextWithSpan(context.Background(), *hook.Span)
+
+		req = req.WithContext(ctx)
+
+		_ = InjectRequestContext(*hook.Span, req)
+	} else {
+		req = req.WithContext(context.Background())
 	}
 
 	req.Header.Add("Content-Type", "application/json")
@@ -138,9 +149,15 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 	resp, err := client.Do(req)
 
 	if err != nil {
-		log.Println(err.Error())
 		return nil, err
 	}
 
 	return resp, nil
+}
+
+func InjectRequestContext(span opentracing.Span, request *http.Request) error {
+	return span.Tracer().Inject(
+		span.Context(),
+		opentracing.HTTPHeaders,
+		opentracing.HTTPHeadersCarrier(request.Header))
 }
