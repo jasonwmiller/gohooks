@@ -1,4 +1,4 @@
-module github.com/averageflow/gohooks/v2
+module github.com/jasonwmiller/gohooks/v2
 
 go 1.15
 
