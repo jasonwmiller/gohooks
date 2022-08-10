@@ -40,7 +40,7 @@ type GoHook struct {
 	// Span for distributed tracing
 	Span *opentracing.Span
 	// HTTP client Timeout in seconds (default 30)
-	HTTPTimeout uint16
+	HTTPTimeout int64
 }
 
 // GoHookPayload represents the data that will be sent in the GoHook.
