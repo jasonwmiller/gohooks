@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/averageflow/gohooks/v2/gohooks"
+	"github.com/jasonwmiller/gohooks/v2/gohooks"
 )
 
 func TestIsGoHookValid(t *testing.T) {
