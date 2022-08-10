@@ -149,7 +149,7 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Charset", "utf-8")
 	req.Header.Add(hook.SignatureHeader, hook.ResultingSha)
-	req.Header.Add(hook.HTTPUserAgent, hook.HTTPUserAgent)
+	req.Header.Add("User-Agent", hook.HTTPUserAgent)
 	// Add user's additional headers
 	for i := range hook.AdditionalHeaders {
 		req.Header.Add(i, hook.AdditionalHeaders[i])
