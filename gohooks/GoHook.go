@@ -39,6 +39,8 @@ type GoHook struct {
 	AdditionalHeaders map[string]string
 	// Span for distributed tracing
 	Span *opentracing.Span
+	// HTTP client Timeout in seconds (default 30)
+	HTTPTimeout uint16
 }
 
 // GoHookPayload represents the data that will be sent in the GoHook.
@@ -113,8 +115,11 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 		// By default send GoHook using a POST method
 		hook.PreferredMethod = http.MethodPost
 	}
+	if hook.HTTPTimeout != nil {
+		hook.HTTPTimeout = 30	
+	}
 
-	client := &http.Client{Timeout: 30 * time.Second}
+	client := &http.Client{Timeout: hook.HTTPTimeout * time.Second}
 
 	req, err := http.NewRequest(
 		hook.PreferredMethod,
