@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/jasonwmiller/gohooks/v2/gohooks"
+	"github.com/averageflow/gohooks/v2/gohooks"
 )
 
 const (
