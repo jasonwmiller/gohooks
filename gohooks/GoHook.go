@@ -115,7 +115,7 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 		// By default send GoHook using a POST method
 		hook.PreferredMethod = http.MethodPost
 	}
-	if hook.HTTPTimeout != nil {
+	if hook.HTTPTimeout == 0 {
 		hook.HTTPTimeout = 30	
 	}
 
