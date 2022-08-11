@@ -39,6 +39,10 @@ type GoHook struct {
 	AdditionalHeaders map[string]string
 	// Span for distributed tracing
 	Span *opentracing.Span
+	// HTTP client Timeout in seconds (default 30)
+	HTTPTimeout int64
+	// HTTPUserAgent
+	HTTPUserAgent string
 }
 
 // GoHookPayload represents the data that will be sent in the GoHook.
@@ -113,8 +117,15 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 		// By default send GoHook using a POST method
 		hook.PreferredMethod = http.MethodPost
 	}
+	if hook.HTTPTimeout == 0 {
+		hook.HTTPTimeout = 30
+	}
 
-	client := &http.Client{Timeout: 30 * time.Second}
+	if hook.HTTPUserAgent == "" {
+		hook.HTTPUserAgent = "GoHooks-Go-http-client/1.1"
+	}
+
+	client := &http.Client{Timeout: time.Duration(hook.HTTPTimeout) * time.Second}
 
 	req, err := http.NewRequest(
 		hook.PreferredMethod,
@@ -137,8 +148,8 @@ func (hook *GoHook) Send(receiverURL string) (*http.Response, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Charset", "utf-8")
-	req.Header.Add(DefaultSignatureHeader, hook.ResultingSha)
-
+	req.Header.Add(hook.SignatureHeader, hook.ResultingSha)
+	req.Header.Add("User-Agent", hook.HTTPUserAgent)
 	// Add user's additional headers
 	for i := range hook.AdditionalHeaders {
 		req.Header.Add(i, hook.AdditionalHeaders[i])
